@@ -5,8 +5,6 @@ export type Message = {
   text: string;
 };
 
-const API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-
 const ChatPage = () => {
   const { messages, setMessages, input, setInput } = UseMenuContext();
 
@@ -18,35 +16,20 @@ const ChatPage = () => {
     setInput("");
 
     try {
-      const response = await fetch(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-4.1-mini",
-            messages: [
-              { role: "system", content: "あなたは親切で優しいAIです。" },
-              { role: "user", content: input },
-            ],
-          }),
-        }
-      );
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input }),
+      });
 
-      const data = await response.json();
+      const data = await res.json();
 
-      const aiText = data.choices[0].message.content;
+      const aiText =
+        data.choices?.[0]?.message?.content || "AIからの返信がありません。";
 
-      const aiMessage: Message = {
-        role: "ai",
-        text: aiText,
-      };
-
+      const aiMessage: Message = { role: "ai", text: aiText };
       setMessages((prev) => [...prev, aiMessage]);
-    } catch (e) {
+    } catch (error) {
       setMessages((prev) => [
         ...prev,
         { role: "ai", text: "エラーが発生しました。" },
@@ -55,7 +38,7 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen max-w-md">
       {/* 会話エリア */}
       <div className="flex-1 overflow-y-auto p-4 bg-gray-100">
         {messages.map((msg, i) => (
