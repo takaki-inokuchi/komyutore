@@ -1,3 +1,5 @@
+"use client";
+import { useRef, useEffect } from "react";
 import UseMenuContext from "../context/porovider";
 
 export type Message = {
@@ -7,6 +9,12 @@ export type Message = {
 
 const ChatPage = () => {
   const { messages, setMessages, input, setInput } = UseMenuContext();
+
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleSend = async () => {
     if (!input) return;
@@ -27,8 +35,33 @@ const ChatPage = () => {
       const aiText =
         data.choices?.[0]?.message?.content || "AIからの返信がありません。";
 
-      const aiMessage: Message = { role: "ai", text: aiText };
-      setMessages((prev) => [...prev, aiMessage]);
+      let index = 0;
+      let currentText = "";
+
+      const typingMessage: Message = {
+        role: "ai",
+        text: "",
+      };
+
+      setMessages((prev) => [...prev, typingMessage]);
+
+      const interval = setInterval(() => {
+        if (index < aiText.length) {
+          currentText += aiText[index];
+          index++;
+
+          setMessages((prev) => {
+            const newMessages = [...prev];
+            newMessages[newMessages.length - 1] = {
+              role: "ai",
+              text: currentText,
+            };
+            return newMessages;
+          });
+        } else {
+          clearInterval(interval);
+        }
+      }, 30);
     } catch (error) {
       setMessages((prev) => [
         ...prev,
@@ -59,12 +92,19 @@ const ChatPage = () => {
             </span>
           </div>
         ))}
+        <div ref={bottomRef} />
       </div>
 
       <div className="flex p-2 border-t">
-        <input
+        <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault(); // 改行防止
+              handleSend();
+            }
+          }}
           className="flex-1 border rounded px-2"
           placeholder="メッセージを入力..."
         />

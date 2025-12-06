@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <Provider>
           <Header />
-          <main className="flex-1 flex justify-center items-center">{children}</main>
+          <main className="pt-16 pb-8 flex-1 flex justify-center items-center">{children}</main>
           <Footer />
         </Provider>
       </body>
