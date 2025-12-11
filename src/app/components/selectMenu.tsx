@@ -38,7 +38,7 @@ const SelectMenu = () => {
           value={aiName}
           onChange={(e) => setAiName(e.target.value)}
           className="border rounded p-2"
-          placeholder="ひなた、みさき、わかな"
+          placeholder="サトシ、カスミ、タケシ"
         />
       </div>
       <div>
