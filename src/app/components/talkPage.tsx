@@ -71,7 +71,7 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] max-w-md overflow-hidden">
+    <div className="flex flex-col h-full max-w-md overflow-hidden">
       {/* 会話エリア */}
       <div className="flex-1 overflow-y-auto p-4 bg-gray-100">
         {messages.map((msg, i) => (
