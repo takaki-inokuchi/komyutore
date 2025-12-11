@@ -18,6 +18,7 @@ export default function Home() {
       ) : (
         <div>
           {menuStage === "selectMenu" && <SelectMenu />}
+
           {menuStage === "talkPage" && <TalkPage />}
         </div>
       )}

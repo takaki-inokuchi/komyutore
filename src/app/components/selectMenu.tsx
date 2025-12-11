@@ -18,7 +18,7 @@ const SelectMenu = () => {
     }
   };
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col h-full justify-center gap-5">
       <div>
         <label className="block">あなたの性別</label>
         <select
