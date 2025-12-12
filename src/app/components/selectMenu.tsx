@@ -16,6 +16,7 @@ const SelectMenu = () => {
       alert("全ての項目を入力してください");
       return;
     }
+    setMenuStage("talkPage");
   };
   return (
     <div className="flex flex-col h-full justify-center gap-5">
@@ -53,7 +54,6 @@ const SelectMenu = () => {
       <button
         onClick={() => {
           handleSubmit();
-          setMenuStage("talkPage");
         }}
         className="text-white hover:bg-green-700 bg-green-600 rounded py-2"
       >

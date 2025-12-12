@@ -8,7 +8,7 @@ export type Message = {
 };
 
 const ChatPage = () => {
-  const { messages, setMessages, input, setInput } = UseMenuContext();
+  const { messages, setMessages, input, setInput, aiName } = UseMenuContext();
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -71,8 +71,7 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-4rem-4rem)] max-w-md overflow-hidden">
-      {/* 会話エリア */}
+    <div className="flex flex-col h-[calc(100dvh-4rem-2rem)] max-w-md overflow-hidden">
       <div className="flex-1 overflow-y-auto p-4 bg-gray-100">
         {messages.map((msg, i) => (
           <div
@@ -90,6 +89,13 @@ const ChatPage = () => {
             >
               {msg.text}
             </span>
+            <div
+              className={`text-sm mt-1 text-gray-500 ${
+                msg.role === "user" ? "text-right" : "text-left"
+              }`}
+            >
+              {msg.role === "user" ? "" : aiName}
+            </div>
           </div>
         ))}
         <div ref={bottomRef} />
