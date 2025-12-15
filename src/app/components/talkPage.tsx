@@ -107,7 +107,7 @@ const ChatPage = () => {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault(); // 改行防止
+              e.preventDefault(); // 改行防止 
               handleSend();
             }
           }}
