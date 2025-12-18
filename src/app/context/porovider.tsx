@@ -10,7 +10,7 @@ import {
   useContext,
   useState,
 } from "react";
-type MenuStage = "topPage" | "selectMenu" | "talkPage";
+type MenuStage = "topPage" | "selectMenu" | "talkPage" | "diagnosis";
 
 interface ContextType {
   showMenu: boolean;

@@ -1,4 +1,5 @@
 "use client";
+import Diagnosis from "./components/diagnosis";
 import SelectMenu from "./components/selectMenu";
 import TalkPage from "./components/talkPage";
 import TopPage from "./components/toppage";
@@ -20,6 +21,8 @@ export default function Home() {
           {menuStage === "selectMenu" && <SelectMenu />}
 
           {menuStage === "talkPage" && <TalkPage />}
+
+          {menuStage === "diagnosis" && <Diagnosis />}
         </div>
       )}
     </div>
