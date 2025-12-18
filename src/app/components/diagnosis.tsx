@@ -10,7 +10,7 @@ const Diagnosis = () => {
   }
 
   return (
-    <div className="p-4 max-w-md">
+    <div className="p-4 h-[calc(100dvh-4rem-2rem)] max-w-md overflow-hidden">
       <h2 className="text-xl font-bold mb-4">診断結果</h2>
 
       <div className="bg-white rounded-lg p-4 border whitespace-pre-wrap">
