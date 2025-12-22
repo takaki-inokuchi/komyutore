@@ -3,7 +3,18 @@ import Link from "next/link";
 import UseMenuContext from "../context/porovider";
 
 const Header = () => {
-  const { setMenuStage, setShowMenu, messages, setMessages } = UseMenuContext();
+  const {
+    setMenuStage,
+    setShowMenu,
+    messages,
+    setMessages,
+    gender,
+    setGender,
+    aiName,
+    setAiName,
+    purpose,
+    setPurpose,
+  } = UseMenuContext();
 
   const handleDiagnosis = async () => {
     try {
@@ -18,7 +29,8 @@ const Header = () => {
       const data = await res.json();
 
       const diagnosisText =
-        data.choices?.[0]?.message?.content ?? "診断結果を取得できませんでした";
+        data.choices?.[0]?.message?.content ??
+        "診断結果を取得できませんでした";
 
       setMessages((prev) => [...prev, { role: "ai", text: diagnosisText }]);
     } catch (e) {
@@ -36,6 +48,12 @@ const Header = () => {
         onClick={() => {
           setMenuStage("topPage");
           setShowMenu(false);
+
+          // ▼ 追加：設定リセット
+          setGender("");
+          setAiName("");
+          setPurpose("");
+          setMessages([]);
         }}
       >
         コミュトレ

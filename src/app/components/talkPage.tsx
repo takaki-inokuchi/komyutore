@@ -9,7 +9,6 @@ export type Message = {
 
 const ChatPage = () => {
   const { messages, setMessages, input, setInput, aiName } = UseMenuContext();
-
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -31,25 +30,19 @@ const ChatPage = () => {
       });
 
       const data = await res.json();
-
       const aiText =
-        data.choices?.[0]?.message?.content || "AIからの返信がありません。";
+        data.choices?.[0]?.message?.content ||
+        "AIからの返信がありません。";
 
       let index = 0;
       let currentText = "";
 
-      const typingMessage: Message = {
-        role: "ai",
-        text: "",
-      };
-
+      const typingMessage: Message = { role: "ai", text: "" };
       setMessages((prev) => [...prev, typingMessage]);
 
       const interval = setInterval(() => {
         if (index < aiText.length) {
-          currentText += aiText[index];
-          index++;
-
+          currentText += aiText[index++];
           setMessages((prev) => {
             const newMessages = [...prev];
             newMessages[newMessages.length - 1] = {
@@ -62,7 +55,7 @@ const ChatPage = () => {
           clearInterval(interval);
         }
       }, 30);
-    } catch (error) {
+    } catch {
       setMessages((prev) => [
         ...prev,
         { role: "ai", text: "エラーが発生しました。" },
@@ -71,55 +64,64 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-4rem-2rem)] max-w-md overflow-hidden">
-      <div className="flex-1 overflow-y-auto p-4 bg-gray-100">
+    <div className="flex flex-col h-[calc(100dvh-4rem)] max-w-md mx-auto bg-white">
+      {/* メッセージエリア */}
+      <div className="flex-1 overflow-y-auto px-4 py-6 bg-gradient-to-b from-gray-50 to-gray-100 space-y-4 pt-10">
         {messages.map((msg, i) => (
           <div
             key={i}
-            className={`mb-2 ${
-              msg.role === "user" ? "text-right" : "text-left"
+            className={`flex ${
+              msg.role === "user" ? "justify-end" : "justify-start"
             }`}
           >
-            <span
-              className={`inline-block px-4 py-2 rounded-lg ${
-                msg.role === "user"
-                  ? "bg-green-500 text-white"
-                  : "bg-white border"
-              }`}
-            >
-              {msg.text}
-            </span>
-            <div
-              className={`text-sm mt-1 text-gray-500 ${
-                msg.role === "user" ? "text-right" : "text-left"
-              }`}
-            >
-              {msg.role === "user" ? "" : aiName}
+            <div className="max-w-[80%]">
+              <div
+                className={`px-4 py-2 rounded-2xl text-sm leading-relaxed shadow-sm ${
+                  msg.role === "user"
+                    ? "bg-green-600 text-white rounded-br-none"
+                    : "bg-white border rounded-bl-none"
+                }`}
+              >
+                {msg.text}
+              </div>
+
+              {msg.role === "ai" && (
+                <div className="text-xs text-gray-500 mt-1 ml-1">
+                  {aiName}
+                </div>
+              )}
             </div>
           </div>
         ))}
         <div ref={bottomRef} />
       </div>
 
-      <div className="flex p-2 border-t shrink-0">
-        <textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault(); // 改行防止 
-              handleSend();
-            }
-          }}
-          className="flex-1 border rounded px-2"
-          placeholder="メッセージを入力..."
-        />
-        <button
-          onClick={handleSend}
-          className="ml-2 bg-green-600 text-white px-4 rounded"
-        >
-          送信
-        </button>
+      {/* 入力エリア */}
+      <div className="border-t bg-white p-3">
+        <div className="flex items-end gap-2">
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
+            rows={1}
+            className="flex-1 resize-none border rounded-2xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="メッセージを入力..."
+          />
+          <button
+            onClick={handleSend}
+            className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded-full transition"
+          >
+            送信
+          </button>
+        </div>
+        <p className="text-xs text-gray-400 mt-1 text-center">
+          Enterで送信 / Shift+Enterで改行
+        </p>
       </div>
     </div>
   );
