@@ -20,7 +20,6 @@ const Header = () => {
       const diagnosisText =
         data.choices?.[0]?.message?.content ?? "診断結果を取得できませんでした";
 
-      // 診断結果を「AIの発言」として追加
       setMessages((prev) => [...prev, { role: "ai", text: diagnosisText }]);
     } catch (e) {
       setMessages((prev) => [
